@@ -1,15 +1,15 @@
 <?php
 
-namespace VendorName\Skeleton;
+namespace SolutionForest\FilamentPanzoom;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 
-class SkeletonPlugin implements Plugin
+class FilamentPanzoomPlugin implements Plugin
 {
     public function getId(): string
     {
-        return 'skeleton';
+        return 'filament-panzoom';
     }
 
     public function register(Panel $panel): void

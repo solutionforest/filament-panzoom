@@ -1,29 +1,25 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "solution-forest/filament-panzoom",
+    "description": "This is my package filament-panzoom",
     "keywords": [
-        ":vendor_name",
+        "SolutionForest",
         "laravel",
-        ":package_slug"
+        "filament-panzoom"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/solutionforest/filament-panzoom",
     "support": {
-        "issues": "https://github.com/:vendor_slug/:package_slug/issues",
-        "source": "https://github.com/:vendor_slug/:package_slug"
+        "issues": "https://github.com/solutionforest/filament-panzoom/issues",
+        "source": "https://github.com/solutionforest/filament-panzoom"
     },
     "license": "MIT",
-    "authors": [
-        {
-            "name": ":author_name",
-            "email": "author@domain.com",
-            "role": "Developer"
-        }
-    ],
+    "authors": [{
+        "name": "Jacky",
+        "email": "info+package@solutionforest.net",
+        "role": "Developer"
+    }],
     "require": {
-        "php": "^8.1",
-        "filament/filament": "^3.0",
-        "filament/forms": "^3.0",
-        "filament/tables": "^3.0",
+        "php": "^8.3",
+        "filament/filament": "^3.3|^4.0",
         "spatie/laravel-package-tools": "^1.15.0"
     },
     "require-dev": {
@@ -36,18 +32,17 @@
         "pestphp/pest-plugin-laravel": "^2.0",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-deprecation-rules": "^1.0",
-        "phpstan/phpstan-phpunit": "^1.0",
-        "spatie/laravel-ray": "^1.26"
+        "phpstan/phpstan-phpunit": "^1.0"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "SolutionForest\\FilamentPanzoom\\": "src/",
+            "SolutionForest\\FilamentPanzoom\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/"
+            "SolutionForest\\FilamentPanzoom\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -67,10 +62,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "SolutionForest\\FilamentPanzoom\\FilamentPanzoomServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "FilamentPanzoom": "SolutionForest\\FilamentPanzoom\\Facades\\FilamentPanzoom"
             }
         }
     },

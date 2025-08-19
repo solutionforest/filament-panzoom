@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace SolutionForest\FilamentPanzoom\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class FilamentPanzoomCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'filament-panzoom';
 
     public $description = 'My command';
 
