@@ -81,18 +81,15 @@ You can use the component directly in any Blade view:
 
 ### In Filament Forms
 
-Use it as a custom field in your Filament forms:
+Use the simple PanZoom component in your Filament forms:
 
 ```php
-use Filament\Forms\Components\ViewField;
+use SolutionForest\FilamentPanzoom\Components\PanZoom;
 
-ViewField::make('image_viewer')
+PanZoom::make('image_viewer')
     ->label('Receipt Image')
-    ->view('filament-panzoom::filament-panzoom')
-    ->viewData([
-        'imageUrl' => $this->record->image_url ?? '/placeholder.jpg',
-        'imageId' => 'receipt-' . $this->record->id,
-    ])
+    ->imageUrl(fn ($record) => $record?->image_url ?? '/placeholder.jpg')
+    ->imageId(fn ($record) => 'receipt-' . ($record?->id ?? 'new'))
     ->columnSpanFull(),
 ```
 
@@ -108,7 +105,7 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\ViewField;
+use SolutionForest\FilamentPanzoom\Components\PanZoom;
 
 class ReceiptResource extends Resource
 {
@@ -123,14 +120,11 @@ class ReceiptResource extends Resource
                     ->image()
                     ->required(),
                 
-                // Pan & Zoom viewer
-                ViewField::make('image_viewer')
+                // Simple Pan & Zoom component
+                PanZoom::make('image_viewer')
                     ->label('Image Preview')
-                    ->view('filament-panzoom::filament-panzoom')
-                    ->viewData(fn ($record) => [
-                        'imageUrl' => $record?->image_url ?? '/placeholder.jpg',
-                        'imageId' => 'receipt-' . ($record?->id ?? 'new'),
-                    ])
+                    ->imageUrl(fn ($record) => $record?->image_url ?? '/placeholder.jpg')
+                    ->imageId(fn ($record) => 'receipt-' . ($record?->id ?? 'new'))
                     ->columnSpanFull()
                     ->hidden(fn ($record) => !$record?->image_url),
             ]);
