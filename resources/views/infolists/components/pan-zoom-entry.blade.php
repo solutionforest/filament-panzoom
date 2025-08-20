@@ -1,8 +1,4 @@
-@php
-    $entry = $this;
-@endphp
-
-<x-dynamic-component :component="$getEntryWrapperView()" :entry="$entry">
+<x-filament-infolists::entry-wrapper :entry="$this">
     <div 
         x-data="interactiveImage({{ json_encode($getImageUrl()) }}, '{{ $getImageId() }}')"
         class="relative bg-gray-50 rounded-lg border border-gray-200 overflow-hidden w-full"
@@ -69,4 +65,4 @@
             <span x-text="`${Math.round(scale * 100)}%`"></span>
         </div>
     </div>
-</x-dynamic-component>
+</x-filament-infolists::entry-wrapper>
