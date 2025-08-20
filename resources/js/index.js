@@ -119,20 +119,29 @@
                 const clickX = e.clientX - rect.left;
                 const clickY = e.clientY - rect.top;
                 
-                // Calculate the position on the image where user clicked
-                const imageRect = this.$refs.image.getBoundingClientRect();
-                const imageClickX = (clickX - this.panX) / this.scale;
-                const imageClickY = (clickY - this.panY) / this.scale;
-                
                 // Toggle between fit-to-container and configurable zoom at click position
                 if (this.scale <= 1) {
                     // Zoom to configurable level at the exact click position
                     const newScale = Math.min(this.maxScale, this.doubleClickZoomLevel);
-                    const scaleDiff = newScale - this.scale;
                     
-                    // Calculate new pan to center the clicked point
-                    const newPanX = clickX - (imageClickX * newScale);
-                    const newPanY = clickY - (imageClickY * newScale);
+                    // Calculate the position on the image where user clicked
+                    // First, get the current image position relative to container
+                    const imageX = clickX - this.panX;
+                    const imageY = clickY - this.panY;
+                    
+                    // Calculate the ratio of click position relative to current image size
+                    const imageWidth = this.$refs.image.naturalWidth * this.scale;
+                    const imageHeight = this.$refs.image.naturalHeight * this.scale;
+                    const clickRatioX = imageX / imageWidth;
+                    const clickRatioY = imageY / imageHeight;
+                    
+                    // Calculate new image dimensions
+                    const newImageWidth = this.$refs.image.naturalWidth * newScale;
+                    const newImageHeight = this.$refs.image.naturalHeight * newScale;
+                    
+                    // Calculate new pan to keep the clicked point in the same position
+                    const newPanX = clickX - (newImageWidth * clickRatioX);
+                    const newPanY = clickY - (newImageHeight * clickRatioY);
                     
                     this.panX = newPanX;
                     this.panY = newPanY;
