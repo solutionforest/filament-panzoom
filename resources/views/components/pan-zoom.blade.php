@@ -1,4 +1,22 @@
-<x-dynamic-component :component="$getFieldWrapperView()" :field="$field">
+@php
+    // Universal wrapper - works for forms, infolists, and other contexts
+    $wrapperComponent = null;
+    $wrapperData = [];
+    
+    if (method_exists($this, 'getFieldWrapperView')) {
+        // Forms context
+        $wrapperComponent = $this->getFieldWrapperView();
+        $wrapperData = ['field' => $field ?? $this];
+    } elseif (method_exists($this, 'getEntryWrapperView')) {
+        // Infolist context
+        $wrapperComponent = $this->getEntryWrapperView();
+        $wrapperData = ['entry' => $entry ?? $this];
+    }
+@endphp
+
+@if($wrapperComponent)
+    <x-dynamic-component :component="$wrapperComponent" :field="$wrapperData['field'] ?? null" :entry="$wrapperData['entry'] ?? null">
+@endif
     <div 
         x-data="interactiveImage({{ json_encode($getImageUrl()) }}, '{{ $getImageId() }}')"
         class="relative bg-gray-50 rounded-lg border border-gray-200 overflow-hidden w-full"
@@ -65,4 +83,7 @@
             <span x-text="`${Math.round(scale * 100)}%`"></span>
         </div>
     </div>
-</x-dynamic-component>
+
+@if($wrapperComponent)
+    </x-dynamic-component>
+@endif

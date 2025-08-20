@@ -79,13 +79,14 @@ You can use the component directly in any Blade view:
 ])
 ```
 
-### In Filament Forms
+### Universal Usage
 
-Use the simple PanZoom component in your Filament forms:
+The PanZoom component works everywhere in Filament - Forms, Infolists, Tables, etc. One simple API:
 
 ```php
 use SolutionForest\FilamentPanzoom\Components\PanZoom;
 
+// Works in Forms, Infolists, Tables - anywhere!
 PanZoom::make('image_viewer')
     ->label('Receipt Image')
     ->imageUrl(fn ($record) => $record?->image_url ?? '/placeholder.jpg')
@@ -93,72 +94,56 @@ PanZoom::make('image_viewer')
     ->columnSpanFull(),
 ```
 
-### In Filament Resources
+### Usage Examples
 
-Complete example in a Filament Resource:
-
+**In Forms:**
 ```php
-<?php
-
-namespace App\Filament\Resources;
-
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use SolutionForest\FilamentPanzoom\Components\PanZoom;
-
-class ReceiptResource extends Resource
+public static function form(Form $form): Form
 {
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('title')
-                    ->required(),
-                
-                Forms\Components\FileUpload::make('image')
-                    ->image()
-                    ->required(),
-                
-                // Simple Pan & Zoom component
-                PanZoom::make('image_viewer')
-                    ->label('Image Preview')
-                    ->imageUrl(fn ($record) => $record?->image_url ?? '/placeholder.jpg')
-                    ->imageId(fn ($record) => 'receipt-' . ($record?->id ?? 'new'))
-                    ->columnSpanFull()
-                    ->hidden(fn ($record) => !$record?->image_url),
-            ]);
-    }
+    return $form->schema([
+        PanZoom::make('image_preview')
+            ->imageUrl(fn ($record) => $record?->image_url)
+            ->columnSpanFull(),
+    ]);
 }
 ```
 
-### In Filament Pages
-
-For custom Filament pages:
-
+**In Infolists:**
 ```php
-// In your Filament Page class
-protected function getViewData(): array
+public function infolist(Infolist $infolist): Infolist
+{
+    return $infolist->schema([
+        PanZoom::make('receipt_image')
+            ->imageUrl(fn ($record) => asset('storage/' . $record->image_path))
+            ->imageId(fn ($record) => 'receipt-' . $record->id),
+    ]);
+}
+```
+
+**In Table Actions:**
+```php
+public static function table(Table $table): Table
+{
+    return $table->actions([
+        Action::make('viewImage')
+            ->form([
+                PanZoom::make('image_viewer')
+                    ->imageUrl(fn ($record) => $record->image_url),
+            ])
+    ]);
+}
+```
+
+**In Custom Pages:**
+```php
+protected function getFormSchema(): array
 {
     return [
-        'imageUrl' => 'path/to/your/image.jpg',
-        'imageId' => 'my-image-viewer',
+        PanZoom::make('document_viewer')
+            ->imageUrl($this->imageUrl)
+            ->columnSpanFull(),
     ];
 }
-```
-
-Then in your page view:
-```blade
-<x-filament-panels::page>
-    <div class="space-y-6">
-        <h2>Document Viewer</h2>
-        
-        @include('filament-panzoom::filament-panzoom', [
-            'imageUrl' => $imageUrl,
-            'imageId' => $imageId
-        ])
-    </div>
-</x-filament-panels::page>
 ```
 
 ## Component Properties
