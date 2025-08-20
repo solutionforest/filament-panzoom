@@ -79,19 +79,26 @@ You can use the component directly in any Blade view:
 ])
 ```
 
-### Universal Usage
+### Usage
 
-The PanZoom component works everywhere in Filament - Forms, Infolists, Tables, etc. One simple API:
+Choose the right component for your context:
 
+**For Forms & Actions:**
 ```php
 use SolutionForest\FilamentPanzoom\Components\PanZoom;
 
-// Works in Forms, Infolists, Tables - anywhere!
 PanZoom::make('image_viewer')
-    ->label('Receipt Image')
-    ->imageUrl(fn ($record) => $record?->image_url ?? '/placeholder.jpg')
-    ->imageId(fn ($record) => 'receipt-' . ($record?->id ?? 'new'))
+    ->imageUrl(fn ($record) => $record?->image_url)
     ->columnSpanFull(),
+```
+
+**For Infolists:**
+```php
+use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;
+
+PanZoomEntry::make('image_viewer')
+    ->imageUrl(fn ($record) => $record?->image_url)
+    ->imageId(fn ($record) => 'receipt-' . $record->id),
 ```
 
 ### Usage Examples
@@ -110,10 +117,12 @@ public static function form(Form $form): Form
 
 **In Infolists:**
 ```php
+use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;
+
 public function infolist(Infolist $infolist): Infolist
 {
     return $infolist->schema([
-        PanZoom::make('receipt_image')
+        PanZoomEntry::make('receipt_image')
             ->imageUrl(fn ($record) => asset('storage/' . $record->image_path))
             ->imageId(fn ($record) => 'receipt-' . $record->id),
     ]);
