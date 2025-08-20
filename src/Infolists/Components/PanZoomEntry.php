@@ -9,7 +9,7 @@ class PanZoomEntry extends Component
     protected string $view = 'filament-panzoom::infolists.components.pan-zoom-entry';
 
     protected string | \Closure | null $imageUrl = null;
-    
+
     protected string | \Closure | null $imageId = null;
 
     public static function make(string $name = 'panzoom'): static
