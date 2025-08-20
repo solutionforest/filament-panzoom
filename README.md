@@ -129,7 +129,7 @@ public static function configure(Schema $schema): Schema
 
 ### Configurable Double-Click Zoom
 
-You can customize the double-click zoom level for each component:
+You can customize the double-click zoom level for each component. Double-clicking again will return the image to the original fit-to-container view:
 
 ```php
 // Filament 3.0+ Forms
@@ -169,7 +169,7 @@ You can use the component directly in any Blade view (works in both 3.0+ and 4.0
 @include('filament-panzoom::filament-panzoom', [
     'imageUrl' => 'https://example.com/image.jpg',
     'imageId' => 'unique-image-id',
-    'doubleClickZoomLevel' => 2.5  // Custom zoom level
+    'doubleClickZoomLevel' => 2.5  // Custom zoom level (double-click again to return to fit)
 ])
 ```
 
@@ -324,13 +324,13 @@ The component accepts the following properties:
 
 ## Quick Tips
 
-💡 **Pro Tip**: Double-click anywhere on the image to quickly zoom to that exact position! The zoom level is configurable (default: 3x).
+💡 **Pro Tip**: Double-click anywhere on the image to zoom to that exact position (configurable, default 3x). Double-click again to return to fit.
 
 ## Features
 
 ### Zoom Controls
 - **Mouse Wheel**: Scroll to zoom in/out
-- **Double-Click**: Double-click to zoom to exact position (configurable level, default: 3x)
+- **Double-Click**: Double-click to zoom to exact position (configurable level, default: 3x). Double-click again to return to fit.
 - **Zoom Buttons**: Click the + and - buttons in the control panel
 - **Zoom Range**: 0.5x to 5x magnification
 
