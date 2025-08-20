@@ -1,5 +1,5 @@
 <div 
-    x-data="interactiveImage({{ json_encode($imageUrl) }}, '{{ $imageId }}')"
+    x-data="interactiveImage({{ json_encode($imageUrl) }}, '{{ $imageId }}', 3.0)"
     class="relative bg-gray-50 rounded-lg border border-gray-200 overflow-hidden w-full"
     style="height: 470px; min-height: 470px; max-height: 470px;"
 >

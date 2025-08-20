@@ -13,12 +13,26 @@ if (class_exists('Filament\Schemas\Components\Component')) {
 
         protected string | \Closure | null $imageId = null;
 
+        protected float $doubleClickZoomLevel = 3.0;
+
         public static function make(string $name = 'panzoom-entry'): static
         {
             $static = app(static::class, ['name' => $name]);
             $static->configure();
 
             return $static;
+        }
+
+        public function doubleClickZoomLevel(float $level): static
+        {
+            $this->doubleClickZoomLevel = $level;
+
+            return $this;
+        }
+
+        public function getDoubleClickZoomLevel(): float
+        {
+            return $this->doubleClickZoomLevel;
         }
 
         public function imageUrl(string | \Closure | null $url): static
@@ -55,12 +69,26 @@ if (class_exists('Filament\Schemas\Components\Component')) {
 
         protected string | \Closure | null $imageId = null;
 
+        protected float $doubleClickZoomLevel = 3.0;
+
         public static function make(string $name = 'panzoom-entry'): static
         {
             $static = app(static::class, ['name' => $name]);
             $static->configure();
 
             return $static;
+        }
+
+        public function doubleClickZoomLevel(float $level): static
+        {
+            $this->doubleClickZoomLevel = $level;
+
+            return $this;
+        }
+
+        public function getDoubleClickZoomLevel(): float
+        {
+            return $this->doubleClickZoomLevel;
         }
 
         public function imageUrl(string | \Closure | null $url): static

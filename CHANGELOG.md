@@ -5,8 +5,10 @@ All notable changes to `filament-panzoom` will be documented in this file.
 ## 1.4.0 - 2024-08-20
 
 ### Added
-- **Double-click zoom functionality**: Double-click on the image to toggle between fit-to-container and 2x zoom
-- Enhanced user experience with intuitive zoom controls
+- **Configurable double-click zoom functionality**: Double-click to zoom to exact position with customizable zoom level
+- **Zoom level configuration**: Set custom zoom levels (0.5x to 5.0x) via `doubleClickZoomLevel()` method
+- Enhanced user experience with precise zoom-to-position controls
+- Default zoom level of 3.0x for optimal detail viewing
 
 ## 1.3.0 - 2024-08-20
 

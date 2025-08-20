@@ -10,7 +10,7 @@ An interactive image zoom and pan component for Filament PHP. This package provi
 **Features:**
 - 🔍 Mouse wheel zooming
 - 🖱️ Click and drag panning
-- 🖱️ Double-click zoom in/out
+- 🖱️ Double-click zoom to position (configurable level)
 - 📱 Touch support for mobile devices
 - ⚡ Smooth transitions and animations
 - 🎯 Zoom in/out buttons
@@ -127,6 +127,40 @@ public static function configure(Schema $schema): Schema
 }
 ```
 
+### Configurable Double-Click Zoom
+
+You can customize the double-click zoom level for each component:
+
+```php
+// Filament 3.0+ Forms
+PanZoom::make('image_preview')
+    ->imageUrl(fn ($record) => $record?->image_url)
+    ->doubleClickZoomLevel(2.5)  // Zoom to 2.5x instead of default 3x
+    ->label('Image Preview');
+
+// Filament 4.0+ Forms
+PanZoom::make('image_preview')
+    ->imageUrl(fn ($record) => $record?->image_url)
+    ->doubleClickZoomLevel(4.0)  // Zoom to 4x for more detail
+    ->columnSpanFull();
+
+// Infolists (both 3.0+ and 4.0+)
+PanZoomEntry::make('image_preview')
+    ->imageUrl(fn ($record) => $record?->image_url)
+    ->doubleClickZoomLevel(2.0)  // Zoom to 2x
+    ->imageId(fn ($record) => 'image-' . $record->id);
+```
+
+**Available Zoom Levels:**
+- **Range**: 0.5x to 5.0x
+- **Default**: 3.0x (good balance for detail viewing)
+- **Common values**:
+  - `2.0` - Moderate zoom
+  - `2.5` - Balanced zoom  
+  - `3.0` - Default (detailed view)
+  - `4.0` - High zoom
+  - `5.0` - Maximum zoom
+
 ### In Blade Views
 
 You can use the component directly in any Blade view (works in both 3.0+ and 4.0+):
@@ -134,7 +168,8 @@ You can use the component directly in any Blade view (works in both 3.0+ and 4.0
 ```blade
 @include('filament-panzoom::filament-panzoom', [
     'imageUrl' => 'https://example.com/image.jpg',
-    'imageId' => 'unique-image-id'
+    'imageId' => 'unique-image-id',
+    'doubleClickZoomLevel' => 2.5  // Custom zoom level
 ])
 ```
 
@@ -285,16 +320,17 @@ The component accepts the following properties:
 |----------|------|----------|-------------|
 | `imageUrl` | string | Yes | The URL of the image to display |
 | `imageId` | string | Yes | Unique identifier for the component instance |
+| `doubleClickZoomLevel` | float | No | Zoom level for double-click (0.5-5.0, default: 3.0) |
 
 ## Quick Tips
 
-💡 **Pro Tip**: Double-click anywhere on the image to quickly toggle between fit-to-container view and 2x zoom for detailed inspection!
+💡 **Pro Tip**: Double-click anywhere on the image to quickly zoom to that exact position! The zoom level is configurable (default: 3x).
 
 ## Features
 
 ### Zoom Controls
 - **Mouse Wheel**: Scroll to zoom in/out
-- **Double-Click**: Double-click to toggle between fit-to-container and 2x zoom
+- **Double-Click**: Double-click to zoom to exact position (configurable level, default: 3x)
 - **Zoom Buttons**: Click the + and - buttons in the control panel
 - **Zoom Range**: 0.5x to 5x magnification
 

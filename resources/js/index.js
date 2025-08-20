@@ -9,7 +9,7 @@
  (function () {
     if (typeof window === 'undefined') return;
 
-    window.interactiveImage = function (imageUrl, imageId) {
+    window.interactiveImage = function (imageUrl, imageId, doubleClickZoomLevel = 3) {
         return {
             imageUrl: imageUrl,
             imageId: imageId,
@@ -26,6 +26,7 @@
             imageBounds: null,
             minScale: 0.1,
             maxScale: 5,
+            doubleClickZoomLevel: doubleClickZoomLevel,
 
             init() {
                 this.$nextTick(() => {
@@ -115,18 +116,26 @@
                 e.preventDefault();
                 
                 const rect = this.$refs.container.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
+                const clickX = e.clientX - rect.left;
+                const clickY = e.clientY - rect.top;
                 
-                // Toggle between fit-to-container and 2x zoom
+                // Calculate the position on the image where user clicked
+                const imageRect = this.$refs.image.getBoundingClientRect();
+                const imageClickX = (clickX - this.panX) / this.scale;
+                const imageClickY = (clickY - this.panY) / this.scale;
+                
+                // Toggle between fit-to-container and configurable zoom at click position
                 if (this.scale <= 1) {
-                    // Zoom to 2x at click position
-                    const newScale = Math.min(this.maxScale, 2);
+                    // Zoom to configurable level at the exact click position
+                    const newScale = Math.min(this.maxScale, this.doubleClickZoomLevel);
                     const scaleDiff = newScale - this.scale;
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    this.panX -= (x - centerX) * scaleDiff;
-                    this.panY -= (y - centerY) * scaleDiff;
+                    
+                    // Calculate new pan to center the clicked point
+                    const newPanX = clickX - (imageClickX * newScale);
+                    const newPanY = clickY - (imageClickY * newScale);
+                    
+                    this.panX = newPanX;
+                    this.panY = newPanY;
                     this.scale = newScale;
                 } else {
                     // Reset to fit container

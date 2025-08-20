@@ -18,7 +18,7 @@
     <x-dynamic-component :component="$wrapperComponent" :field="$wrapperData['field'] ?? null" :entry="$wrapperData['entry'] ?? null">
 @endif
     <div 
-        x-data="interactiveImage({{ json_encode($getImageUrl()) }}, '{{ $getImageId() }}')"
+        x-data="interactiveImage({{ json_encode($getImageUrl()) }}, '{{ $getImageId() }}', {{ $getDoubleClickZoomLevel() }})"
         class="relative bg-gray-50 rounded-lg border border-gray-200 overflow-hidden w-full"
         style="height: 470px; min-height: 470px; max-height: 470px;"
     >
