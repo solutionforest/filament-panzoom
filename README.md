@@ -1,4 +1,5 @@
 # Filament Pan & Zoom
+![filament-panzoom](https://github.com/user-attachments/assets/f1724153-4344-4579-be41-d9e65de612c1)
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/solutionforest/filament-panzoom.svg?style=flat-square)](https://packagist.org/packages/solution-forest/filament-panzoom)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/solutionforest/filament-panzoom/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/solutionforest/filament-panzoom/actions?query=workflow%3Arun-tests+branch%3Amain)
