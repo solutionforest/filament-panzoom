@@ -6,7 +6,6 @@ use Filament\Forms\Components\Component;
 
 class PanZoom extends Component
 {
-
     protected string $view = 'filament-panzoom::components.pan-zoom';
 
     protected string | \Closure | null $imageUrl = null;
