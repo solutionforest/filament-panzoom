@@ -1,3 +1,7 @@
+@php
+    $entry = $this;
+@endphp
+
 <x-dynamic-component :component="$getEntryWrapperView()" :entry="$entry">
     <div 
         x-data="interactiveImage({{ json_encode($getImageUrl()) }}, '{{ $getImageId() }}')"

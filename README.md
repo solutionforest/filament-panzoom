@@ -81,9 +81,11 @@ You can use the component directly in any Blade view:
 
 ### Usage
 
-Choose the right component for your context:
+**⚠️ Important: Choose the correct component for your context!**
 
-**For Forms & Actions:**
+Filament requires different component base classes for different contexts:
+
+**For Forms, Actions & Tables:**
 ```php
 use SolutionForest\FilamentPanzoom\Components\PanZoom;
 
@@ -100,6 +102,8 @@ PanZoomEntry::make('image_viewer')
     ->imageUrl(fn ($record) => $record?->image_url)
     ->imageId(fn ($record) => 'receipt-' . $record->id),
 ```
+
+> **Why two components?** Filament has separate component hierarchies for Forms (`Filament\Forms\Components\Component`) and Infolists (`Filament\Infolists\Components\Component`). Using the wrong one will cause a TypeError.
 
 ### Usage Examples
 
@@ -192,6 +196,30 @@ The component uses Tailwind CSS classes and is designed to work seamlessly with 
 - Smooth hover effects
 - Mobile-friendly touch controls
 - Consistent with Filament's design patterns
+
+## Troubleshooting
+
+### Common Issues
+
+**TypeError: Argument #1 ($component) must be of type Filament\Infolists\Components\Component**
+- ❌ You're using `PanZoom` in an Infolist
+- ✅ Use `PanZoomEntry` for Infolists instead
+
+**TypeError: Argument #1 ($component) must be of type Filament\Forms\Components\Component**  
+- ❌ You're using `PanZoomEntry` in a Form/Action
+- ✅ Use `PanZoom` for Forms/Actions instead
+
+**Fatal Error: Class was composed with trait conflicts**
+- ✅ Fixed in v1.2.1+ - update your package
+
+### Quick Reference
+
+| Context | Component | Import |
+|---------|-----------|--------|
+| Forms | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
+| Actions | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
+| Tables | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
+| Infolists | `PanZoomEntry` | `use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;` |
 
 ## Browser Support
 
