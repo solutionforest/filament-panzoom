@@ -1,9 +1,9 @@
 # Filament Pan & Zoom
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/solutionforest/filament-panzoom.svg?style=flat-square)](https://packagist.org/packages/solutionforest/filament-panzoom)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/solutionforest/filament-panzoom.svg?style=flat-square)](https://packagist.org/packages/solution-forest/filament-panzoom)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/solutionforest/filament-panzoom/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/solutionforest/filament-panzoom/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/solutionforest/filament-panzoom/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/solutionforest/filament-panzoom/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/solutionforest/filament-panzoom.svg?style=flat-square)](https://packagist.org/packages/solutionforest/filament-panzoom)
+[![Total Downloads](https://img.shields.io/packagist/dt/solutionforest/filament-panzoom.svg?style=flat-square)](https://packagist.org/packages/solution-forest/filament-panzoom)
 
 An interactive image zoom and pan component for Filament PHP. This package provides a beautiful, responsive image viewer with smooth zoom and pan functionality, perfect for viewing receipts, documents, or any images that require detailed inspection.
 
