@@ -4,7 +4,7 @@
     style="height: 470px; min-height: 470px; max-height: 470px;"
 >
         <div 
-            class="w-full h-full relative flex items-center justify-center"
+            class="w-full h-full relative"
             x-ref="container"
             @wheel.prevent="zoom"
             @mousemove="pan"
@@ -16,10 +16,10 @@
             <img 
                 x-ref="image"
                 :src="imageUrl"
-                :style="`transform: translate(${panX}px, ${panY}px) scale(${scale}); transform-origin: center center;`"
+                :style="`transform: translate(${panX}px, ${panY}px) scale(${scale}); transform-origin: 0 0; position: absolute; left: 0; top: 0;`"
                 :class="isPanning ? 'cursor-grabbing' : 'cursor-grab'"
                 class="max-w-none transition-transform duration-75 block select-none"
-                style="object-fit: contain; max-width: 100%; max-height: 100%;"
+                style="max-width: none; max-height: none;"
                 alt="Receipt Image"
                 @load="onImageLoad"
                 @mousedown="startPan"

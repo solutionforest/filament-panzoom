@@ -16,6 +16,9 @@
             scale: 1,
             panX: 0,
             panY: 0,
+            fittedScale: 1,
+            fittedPanX: 0,
+            fittedPanY: 0,
             originX: 0,
             originY: 0,
             isPanning: false,
@@ -64,10 +67,20 @@
 
                 const scaleX = containerWidth / imageWidth;
                 const scaleY = containerHeight / imageHeight;
-                this.scale = Math.min(scaleX, scaleY, 1);
+                const newScale = Math.min(scaleX, scaleY, 1);
 
-                this.panX = 0;
-                this.panY = 0;
+                // Center the image within the container using top-left origin math
+                const centeredPanX = (containerWidth - imageWidth * newScale) / 2;
+                const centeredPanY = (containerHeight - imageHeight * newScale) / 2;
+
+                this.scale = newScale;
+                this.panX = centeredPanX;
+                this.panY = centeredPanY;
+
+                // Store fitted state for precise toggling
+                this.fittedScale = newScale;
+                this.fittedPanX = centeredPanX;
+                this.fittedPanY = centeredPanY;
 
                 this.$nextTick(() => {
                     this.updateBounds();
@@ -119,38 +132,32 @@
                 const clickX = e.clientX - rect.left;
                 const clickY = e.clientY - rect.top;
                 
-                // Toggle between fit-to-container and configurable zoom at click position
-                if (this.scale <= 1) {
-                    // Zoom to configurable level at the exact click position
+                // Toggle: if we're approximately at fitted state, zoom in, else return to fitted state
+                const near = (a, b, eps = 0.01) => Math.abs(a - b) <= eps;
+                const isNearFitted = near(this.scale, this.fittedScale) && near(this.panX, this.fittedPanX, 1) && near(this.panY, this.fittedPanY, 1);
+
+                if (isNearFitted) {
+                    // Zoom to configurable level at the exact click position using top-left origin math
                     const newScale = Math.min(this.maxScale, this.doubleClickZoomLevel);
-                    
-                    // Calculate the position on the image where user clicked
-                    // First, get the current image position relative to container
-                    const imageX = clickX - this.panX;
-                    const imageY = clickY - this.panY;
-                    
-                    // Calculate the ratio of click position relative to current image size
-                    const imageWidth = this.$refs.image.naturalWidth * this.scale;
-                    const imageHeight = this.$refs.image.naturalHeight * this.scale;
-                    const clickRatioX = imageX / imageWidth;
-                    const clickRatioY = imageY / imageHeight;
-                    
-                    // Calculate new image dimensions
-                    const newImageWidth = this.$refs.image.naturalWidth * newScale;
-                    const newImageHeight = this.$refs.image.naturalHeight * newScale;
-                    
-                    // Calculate new pan to keep the clicked point in the same position
-                    const newPanX = clickX - (newImageWidth * clickRatioX);
-                    const newPanY = clickY - (newImageHeight * clickRatioY);
-                    
+
+                    // Image coordinates of the click before scaling
+                    const u = (clickX - this.panX) / this.scale;
+                    const v = (clickY - this.panY) / this.scale;
+
+                    // New pan to keep the clicked point stationary
+                    const newPanX = clickX - (u * newScale);
+                    const newPanY = clickY - (v * newScale);
+
+                    this.scale = newScale;
                     this.panX = newPanX;
                     this.panY = newPanY;
-                    this.scale = newScale;
                 } else {
-                    // Reset to fit container
-                    this.fitToContainer();
+                    // Return to fitted state
+                    this.scale = this.fittedScale;
+                    this.panX = this.fittedPanX;
+                    this.panY = this.fittedPanY;
                 }
-                
+
                 this.constrainPan();
             },
 
@@ -165,27 +172,46 @@
                 const newScale = Math.max(this.minScale, Math.min(this.maxScale, this.scale + delta));
 
                 if (newScale !== this.scale) {
-                    const scaleDiff = newScale - this.scale;
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    this.panX -= (x - centerX) * scaleDiff;
-                    this.panY -= (y - centerY) * scaleDiff;
+                    // Keep cursor point stationary (top-left origin math)
+                    const u = (x - this.panX) / this.scale;
+                    const v = (y - this.panY) / this.scale;
 
                     this.scale = newScale;
+                    this.panX = x - (u * newScale);
+                    this.panY = y - (v * newScale);
+
                     this.constrainPan();
                 }
             },
 
             zoomIn() {
+                const rect = this.$refs.container.getBoundingClientRect();
+                const x = rect.width / 2;
+                const y = rect.height / 2;
                 const newScale = Math.min(this.maxScale, this.scale + 0.2);
-                this.scale = newScale;
-                this.constrainPan();
+                if (newScale !== this.scale) {
+                    const u = (x - this.panX) / this.scale;
+                    const v = (y - this.panY) / this.scale;
+                    this.scale = newScale;
+                    this.panX = x - (u * newScale);
+                    this.panY = y - (v * newScale);
+                    this.constrainPan();
+                }
             },
 
             zoomOut() {
+                const rect = this.$refs.container.getBoundingClientRect();
+                const x = rect.width / 2;
+                const y = rect.height / 2;
                 const newScale = Math.max(this.minScale, this.scale - 0.2);
-                this.scale = newScale;
-                this.constrainPan();
+                if (newScale !== this.scale) {
+                    const u = (x - this.panX) / this.scale;
+                    const v = (y - this.panY) / this.scale;
+                    this.scale = newScale;
+                    this.panX = x - (u * newScale);
+                    this.panY = y - (v * newScale);
+                    this.constrainPan();
+                }
             },
 
             reset() {
@@ -201,11 +227,22 @@
                 const containerWidth = container.offsetWidth;
                 const containerHeight = container.offsetHeight;
 
-                const maxPanX = Math.max(0, (imageWidth - containerWidth) / 2);
-                const maxPanY = Math.max(0, (imageHeight - containerHeight) / 2);
+                // If the image is smaller than the container, keep it centered
+                if (imageWidth <= containerWidth) {
+                    this.panX = (containerWidth - imageWidth) / 2;
+                } else {
+                    const minPanX = containerWidth - imageWidth;
+                    const maxPanX = 0;
+                    this.panX = Math.max(minPanX, Math.min(maxPanX, this.panX));
+                }
 
-                this.panX = Math.max(-maxPanX, Math.min(maxPanX, this.panX));
-                this.panY = Math.max(-maxPanY, Math.min(maxPanY, this.panY));
+                if (imageHeight <= containerHeight) {
+                    this.panY = (containerHeight - imageHeight) / 2;
+                } else {
+                    const minPanY = containerHeight - imageHeight;
+                    const maxPanY = 0;
+                    this.panY = Math.max(minPanY, Math.min(maxPanY, this.panY));
+                }
             },
 
             startTouch(e) {
