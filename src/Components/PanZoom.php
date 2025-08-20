@@ -3,11 +3,9 @@
 namespace SolutionForest\FilamentPanzoom\Components;
 
 use Filament\Forms\Components\Component;
-use Filament\Support\Concerns\EvaluatesClosures;
 
 class PanZoom extends Component
 {
-    use EvaluatesClosures;
 
     protected string $view = 'filament-panzoom::components.pan-zoom';
 
