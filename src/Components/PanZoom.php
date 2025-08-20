@@ -12,7 +12,7 @@ class PanZoom extends Component
     protected string $view = 'filament-panzoom::components.pan-zoom';
 
     protected string | \Closure | null $imageUrl = null;
-    
+
     protected string | \Closure | null $imageId = null;
 
     public static function make(string $name = 'panzoom'): static
