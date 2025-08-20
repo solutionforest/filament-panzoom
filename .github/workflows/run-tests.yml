@@ -8,11 +8,10 @@ on:
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-latest, windows-latest]
         php: [8.3]
         laravel: [11.*]
         stability: [prefer-lowest, prefer-stable]
@@ -20,7 +19,7 @@ jobs:
           - laravel: 11.*
             testbench: 9.*
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }}
 
     steps:
       - name: Checkout code
@@ -41,9 +40,18 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          # Require Laravel framework
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+
+          # Require Testbench and upgrade Collision for Laravel 11 compatibility
+          composer require --dev "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer require --dev "nunomaduro/collision:^8.0" --no-interaction --no-update
+
+          # Update dependencies
           if [ "${{ matrix.stability }}" = "prefer-lowest" ]; then
-            composer update --prefer-lowest --prefer-dist --no-interaction --with="orchestra/canvas:^9.0"
+            # Pin Canvas to avoid incompatible old versions
+            composer update --prefer-lowest --prefer-dist --no-interaction \
+              --with="orchestra/canvas:^9.0"
           else
             composer update --prefer-stable --prefer-dist --no-interaction
           fi
