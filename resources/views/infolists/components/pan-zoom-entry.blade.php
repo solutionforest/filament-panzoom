@@ -1,9 +1,8 @@
-<x-filament-infolists::entry-wrapper :entry="$this">
-    <div 
-        x-data="interactiveImage({{ json_encode($getImageUrl()) }}, '{{ $getImageId() }}')"
-        class="relative bg-gray-50 rounded-lg border border-gray-200 overflow-hidden w-full"
-        style="height: 470px; min-height: 470px; max-height: 470px;"
-    >
+<div 
+    x-data="interactiveImage({{ json_encode($getImageUrl()) }}, '{{ $getImageId() }}')"
+    class="relative bg-gray-50 rounded-lg border border-gray-200 overflow-hidden w-full"
+    style="height: 470px; min-height: 470px; max-height: 470px;"
+>
         <div 
             class="w-full h-full relative flex items-center justify-center"
             x-ref="container"
@@ -64,5 +63,4 @@
         <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1 shadow-lg text-sm text-gray-600">
             <span x-text="`${Math.round(scale * 100)}%`"></span>
         </div>
-    </div>
-</x-filament-infolists::entry-wrapper>
+</div>
