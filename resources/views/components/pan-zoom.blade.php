@@ -42,6 +42,7 @@
                 alt="Image"
                 @load="onImageLoad"
                 @mousedown="startPan"
+                @dblclick="doubleClickZoom"
                 @touchstart="startTouch"
                 draggable="false"
             />

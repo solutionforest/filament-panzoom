@@ -109,6 +109,33 @@
                 }
             },
 
+            doubleClickZoom(e) {
+                if (e.target !== this.$refs.image) return;
+                
+                e.preventDefault();
+                
+                const rect = this.$refs.container.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Toggle between fit-to-container and 2x zoom
+                if (this.scale <= 1) {
+                    // Zoom to 2x at click position
+                    const newScale = Math.min(this.maxScale, 2);
+                    const scaleDiff = newScale - this.scale;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    this.panX -= (x - centerX) * scaleDiff;
+                    this.panY -= (y - centerY) * scaleDiff;
+                    this.scale = newScale;
+                } else {
+                    // Reset to fit container
+                    this.fitToContainer();
+                }
+                
+                this.constrainPan();
+            },
+
             zoom(e) {
                 e.preventDefault();
 

@@ -10,6 +10,7 @@ An interactive image zoom and pan component for Filament PHP. This package provi
 **Features:**
 - 🔍 Mouse wheel zooming
 - 🖱️ Click and drag panning
+- 🖱️ Double-click zoom in/out
 - 📱 Touch support for mobile devices
 - ⚡ Smooth transitions and animations
 - 🎯 Zoom in/out buttons
@@ -68,9 +69,67 @@ php artisan vendor:publish --tag="filament-panzoom-config"
 
 ## Usage
 
+### Filament Version Compatibility
+
+This package supports both **Filament 3.0+** and **Filament 4.0+** with automatic compatibility detection.
+
+#### Filament 3.0+ (Legacy)
+```php
+// Forms, Actions & Tables
+use SolutionForest\FilamentPanzoom\Components\PanZoom;
+
+public static function form(Form $form): Form
+{
+    return $form->schema([
+        PanZoom::make('image_preview')
+            ->imageUrl(fn ($record) => $record?->image_url)
+            ->label('Image Preview')
+            ->columnSpanFull(),
+    ]);
+}
+
+// Infolists
+use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;
+
+public function infolist(Infolist $infolist): Infolist
+{
+    return $infolist->schema([
+        PanZoomEntry::make('image_preview')
+            ->imageUrl(fn ($record) => $record?->image_url)
+            ->label('Image Preview'),
+    ]);
+}
+```
+
+#### Filament 4.0+ (Current)
+```php
+// Forms - Uses Schemas
+use SolutionForest\FilamentPanzoom\Components\PanZoom;
+
+public static function configure(Schema $schema): Schema
+{
+    return $schema->components([
+        PanZoom::make('image_preview')
+            ->imageUrl(fn ($record) => $record?->image_url),
+        // Note: label() and columnSpanFull() methods not available in 4.0+
+    ]);
+}
+
+// Infolists - Uses Schemas
+use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;
+
+public static function configure(Schema $schema): Schema
+{
+    return $schema->components([
+        PanZoomEntry::make('image_preview')
+            ->imageUrl(fn ($record) => $record?->image_url),
+    ]);
+}
+```
+
 ### In Blade Views
 
-You can use the component directly in any Blade view:
+You can use the component directly in any Blade view (works in both 3.0+ and 4.0+):
 
 ```blade
 @include('filament-panzoom::filament-panzoom', [
@@ -79,33 +138,34 @@ You can use the component directly in any Blade view:
 ])
 ```
 
-### Usage
+### Component Selection Guide
 
 **⚠️ Important: Choose the correct component for your context!**
 
-Filament requires different component base classes for different contexts:
+| Context | Component | Import |
+|---------|-----------|--------|
+| Forms (3.0+) | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
+| Forms (4.0+) | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
+| Actions | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
+| Tables | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
+| Infolists (3.0+) | `PanZoomEntry` | `use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;` |
+| Infolists (4.0+) | `PanZoomEntry` | `use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;` |
 
-**For Forms, Actions & Tables:**
-```php
-use SolutionForest\FilamentPanzoom\Components\PanZoom;
+> **Why two components?** Filament has separate component hierarchies for Forms and Infolists. Using the wrong one will cause a TypeError.
 
-PanZoom::make('image_viewer')
-    ->imageUrl(fn ($record) => $record?->image_url)
-    ->columnSpanFull(),
-```
+### Key Differences: Filament 3.0+ vs 4.0+
 
-**For Infolists:**
-```php
-use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;
-
-PanZoomEntry::make('image_viewer')
-    ->imageUrl(fn ($record) => $record?->image_url)
-    ->imageId(fn ($record) => 'receipt-' . $record->id),
-```
-
-> **Why two components?** Filament has separate component hierarchies for Forms (`Filament\Forms\Components\Component`) and Infolists (`Filament\Infolists\Components\Component`). Using the wrong one will cause a TypeError.
+| Feature | Filament 3.0+ | Filament 4.0+ |
+|---------|---------------|---------------|
+| **Forms Structure** | `form(Form $form): Form` | `configure(Schema $schema): Schema` |
+| **Infolists Structure** | `infolist(Infolist $infolist): Infolist` | `configure(Schema $schema): Schema` |
+| **Available Methods** | `label()`, `columnSpanFull()`, etc. | Limited methods (Schemas-based) |
+| **Component Base** | `Filament\Forms\Components\Component` | `Filament\Schemas\Components\Component` |
+| **Auto-detection** | ✅ Yes | ✅ Yes |
 
 ### Usage Examples
+
+#### Filament 3.0+ Examples
 
 **In Forms:**
 ```php
@@ -114,6 +174,7 @@ public static function form(Form $form): Form
     return $form->schema([
         PanZoom::make('image_preview')
             ->imageUrl(fn ($record) => $record?->image_url)
+            ->label('Image Preview')
             ->columnSpanFull(),
     ]);
 }
@@ -126,6 +187,63 @@ use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;
 public function infolist(Infolist $infolist): Infolist
 {
     return $infolist->schema([
+        PanZoomEntry::make('receipt_image')
+            ->imageUrl(fn ($record) => asset('storage/' . $record->image_path))
+            ->label('Receipt Image')
+            ->imageId(fn ($record) => 'receipt-' . $record->id),
+    ]);
+}
+```
+
+**In Table Actions:**
+```php
+public static function table(Table $table): Table
+{
+    return $table->actions([
+        Action::make('viewImage')
+            ->form([
+                PanZoom::make('image_viewer')
+                    ->imageUrl(fn ($record) => $record->image_url)
+                    ->label('Image Viewer'),
+            ])
+    ]);
+}
+```
+
+**In Custom Pages:**
+```php
+protected function getFormSchema(): array
+{
+    return [
+        PanZoom::make('document_viewer')
+            ->imageUrl($this->imageUrl)
+            ->label('Document Viewer')
+            ->columnSpanFull(),
+    ];
+}
+```
+
+#### Filament 4.0+ Examples
+
+**In Forms (Schemas):**
+```php
+public static function configure(Schema $schema): Schema
+{
+    return $schema->components([
+        PanZoom::make('image_preview')
+            ->imageUrl(fn ($record) => $record?->image_url),
+        // Note: label() and columnSpanFull() methods not available in 4.0+
+    ]);
+}
+```
+
+**In Infolists (Schemas):**
+```php
+use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;
+
+public static function configure(Schema $schema): Schema
+{
+    return $schema->components([
         PanZoomEntry::make('receipt_image')
             ->imageUrl(fn ($record) => asset('storage/' . $record->image_path))
             ->imageId(fn ($record) => 'receipt-' . $record->id),
@@ -153,8 +271,8 @@ protected function getFormSchema(): array
 {
     return [
         PanZoom::make('document_viewer')
-            ->imageUrl($this->imageUrl)
-            ->columnSpanFull(),
+            ->imageUrl($this->imageUrl),
+        // Note: columnSpanFull() method not available in 4.0+
     ];
 }
 ```
@@ -168,10 +286,15 @@ The component accepts the following properties:
 | `imageUrl` | string | Yes | The URL of the image to display |
 | `imageId` | string | Yes | Unique identifier for the component instance |
 
+## Quick Tips
+
+💡 **Pro Tip**: Double-click anywhere on the image to quickly toggle between fit-to-container view and 2x zoom for detailed inspection!
+
 ## Features
 
 ### Zoom Controls
 - **Mouse Wheel**: Scroll to zoom in/out
+- **Double-Click**: Double-click to toggle between fit-to-container and 2x zoom
 - **Zoom Buttons**: Click the + and - buttons in the control panel
 - **Zoom Range**: 0.5x to 5x magnification
 
@@ -212,14 +335,35 @@ The component uses Tailwind CSS classes and is designed to work seamlessly with 
 **Fatal Error: Class was composed with trait conflicts**
 - ✅ Fixed in v1.2.1+ - update your package
 
+**Method not found: label() or columnSpanFull() in Filament 4.0+**
+- ❌ These methods aren't available in Filament 4.0+ Schemas
+- ✅ Remove these method calls or use Filament 3.0+ syntax
+
+**Undefined type 'Filament\Schemas\Components\Component'**
+- ❌ Linter error in Filament 3.0+ environment
+- ✅ This is expected - the package uses runtime detection for compatibility
+
+### Version-Specific Issues
+
+#### Filament 3.0+
+- ✅ All methods available (`label()`, `columnSpanFull()`, etc.)
+- ✅ Traditional Forms/Infolists structure
+
+#### Filament 4.0+
+- ⚠️ Limited methods available (Schemas-based)
+- ⚠️ Different structure (`configure(Schema $schema)`)
+- ✅ Automatic compatibility detection
+
 ### Quick Reference
 
 | Context | Component | Import |
 |---------|-----------|--------|
-| Forms | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
+| Forms (3.0+) | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
+| Forms (4.0+) | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
 | Actions | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
 | Tables | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
-| Infolists | `PanZoomEntry` | `use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;` |
+| Infolists (3.0+) | `PanZoomEntry` | `use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;` |
+| Infolists (4.0+) | `PanZoomEntry` | `use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;` |
 
 ## Browser Support
 
