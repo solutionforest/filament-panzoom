@@ -2,6 +2,18 @@
 
 All notable changes to `filament-panzoom` will be documented in this file.
 
+## v1.4.4 - 2025-08-21
+
+### What's Changed
+
+* Bump actions/checkout from 4 to 5 by @dependabot[bot] in https://github.com/solutionforest/filament-panzoom/pull/1
+
+### New Contributors
+
+* @dependabot[bot] made their first contribution in https://github.com/solutionforest/filament-panzoom/pull/1
+
+**Full Changelog**: https://github.com/solutionforest/filament-panzoom/compare/v1.4.3...v1.4.4
+
 ## v1.4.3 - 2025-08-20
 
 **Full Changelog**: https://github.com/solutionforest/filament-panzoom/compare/v1.4.2...v1.4.3
