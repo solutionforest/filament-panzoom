@@ -19,6 +19,10 @@ An interactive image zoom and pan component for Filament PHP. This package provi
 - 📊 Real-time zoom percentage display
 - 🎨 Modern, clean UI design
 
+
+https://github.com/user-attachments/assets/a62bb402-cf1c-497b-a3f3-509819db6926
+
+
 ## Requirements
 
 - PHP 8.3+
