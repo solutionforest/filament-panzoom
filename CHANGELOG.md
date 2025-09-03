@@ -2,6 +2,10 @@
 
 All notable changes to `filament-panzoom` will be documented in this file.
 
+## v1.4.5 - 2025-09-03
+
+**Full Changelog**: https://github.com/solutionforest/filament-panzoom/compare/v1.4.4...v1.4.5
+
 ## v1.4.4 - 2025-08-21
 
 ### What's Changed
