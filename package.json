@@ -2,13 +2,10 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev:styles": "npx tailwindcss -i resources/css/index.css -o resources/dist/filament-panzoom.css --postcss --watch",
         "dev:scripts": "node bin/build.js --dev",
-        "build:styles": "npx tailwindcss -i resources/css/index.css -o resources/dist/filament-panzoom.css --postcss --minify && npm run purge",
         "build:scripts": "node bin/build.js",
-        "purge": "filament-purge -i resources/dist/filament-panzoom.css -o resources/dist/filament-panzoom.css -v 3.x",
-        "dev": "npm-run-all --parallel dev:*",
-        "build": "npm-run-all build:*"
+        "dev": "npm run dev:scripts",
+        "build": "npm run build:scripts"
     },
     "devDependencies": {
         "@awcodes/filament-plugin-purge": "^1.1.1",

@@ -101,7 +101,6 @@ class FilamentPanzoomServiceProvider extends PackageServiceProvider
     {
         return [
             // AlpineComponent::make('filament-panzoom', __DIR__ . '/../resources/dist/components/filament-panzoom.js'),
-            Css::make('filament-panzoom-styles', __DIR__ . '/../resources/dist/filament-panzoom.css'),
             Js::make('filament-panzoom-scripts', __DIR__ . '/../resources/dist/filament-panzoom.js'),
         ];
     }
