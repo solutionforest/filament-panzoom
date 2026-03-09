@@ -31,6 +31,7 @@
 
         <div class="absolute top-4 right-4 flex flex-col gap-2 bg-white/90 backdrop-blur-sm rounded-lg p-2 shadow-lg">
             <button 
+                type="button"
                 @click="zoomIn"
                 class="w-8 h-8 flex items-center justify-center bg-white hover:bg-gray-50 border border-gray-200 rounded text-gray-600 hover:text-gray-800 transition-colors"
                 title="Zoom In"
@@ -41,6 +42,7 @@
             </button>
             
             <button 
+                type="button"
                 @click="zoomOut"
                 class="w-8 h-8 flex items-center justify-center bg-white hover:bg-gray-50 border border-gray-200 rounded text-gray-600 hover:text-gray-800 transition-colors"
                 title="Zoom Out"
@@ -51,6 +53,7 @@
             </button>
             
             <button 
+                type="button"
                 @click="reset"
                 class="w-8 h-8 flex items-center justify-center bg-white hover:bg-gray-50 border border-gray-200 rounded text-gray-600 hover:text-gray-800 transition-colors"
                 title="Reset View"
