@@ -26,8 +26,22 @@ https://github.com/user-attachments/assets/a62bb402-cf1c-497b-a3f3-509819db6926
 ## Requirements
 
 - PHP 8.3+
-- Laravel 10.0+
+- Laravel 11.0+ with Filament 4.x, or Laravel 10.0+ with Filament 3.x
 - Filament 3.3+ or 4.0+
+
+## Supported Versions
+
+The table below shows which Filament, Laravel and PHP versions each package release supports.
+
+| Package version | Filament | Laravel | PHP | Status |
+|-----------------|----------|---------|-----|--------|
+| `1.4.x` | `3.3` – `3.x` | `10.x` – `11.x` | `8.3+` | Supported |
+| `1.4.x` | `4.0` – `4.x` | `11.x` – `12.x` | `8.3+` | Supported |
+| `1.3.x` and older | `3.x` only | `10.x` | `8.3+` | Legacy |
+
+> **Filament 5.x is not supported yet.** The package is tested against Filament 3.x and 4.x.
+
+Compatibility is detected at runtime, so a single package build works on both Filament 3.x and 4.x.
 
 ## Installation
 
@@ -76,9 +90,9 @@ php artisan vendor:publish --tag="filament-panzoom-config"
 
 ### Filament Version Compatibility
 
-This package supports both **Filament 3.0+** and **Filament 4.0+** with automatic compatibility detection.
+This package supports both **Filament 3.3+** and **Filament 4.x** with automatic compatibility detection.
 
-#### Filament 3.0+ (Legacy)
+#### Filament 3.3+ (Legacy)
 ```php
 // Forms, Actions & Tables
 use SolutionForest\FilamentPanzoom\Components\PanZoom;
@@ -137,7 +151,7 @@ public static function configure(Schema $schema): Schema
 You can customize the double-click zoom level for each component. Double-clicking again will return the image to the original fit-to-container view:
 
 ```php
-// Filament 3.0+ Forms
+// Filament 3.3+ Forms
 PanZoom::make('image_preview')
     ->imageUrl(fn ($record) => $record?->image_url)
     ->doubleClickZoomLevel(2.5)  // Zoom to 2.5x instead of default 3x
@@ -149,7 +163,7 @@ PanZoom::make('image_preview')
     ->doubleClickZoomLevel(4.0)  // Zoom to 4x for more detail
     ->columnSpanFull();
 
-// Infolists (both 3.0+ and 4.0+)
+// Infolists (both 3.3+ and 4.x)
 PanZoomEntry::make('image_preview')
     ->imageUrl(fn ($record) => $record?->image_url)
     ->doubleClickZoomLevel(2.0)  // Zoom to 2x
@@ -168,7 +182,7 @@ PanZoomEntry::make('image_preview')
 
 ### In Blade Views
 
-You can use the component directly in any Blade view (works in both 3.0+ and 4.0+):
+You can use the component directly in any Blade view (works in both 3.3+ and 4.x):
 
 ```blade
 @include('filament-panzoom::filament-panzoom', [
@@ -184,18 +198,18 @@ You can use the component directly in any Blade view (works in both 3.0+ and 4.0
 
 | Context | Component | Import |
 |---------|-----------|--------|
-| Forms (3.0+) | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
+| Forms (3.3+) | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
 | Forms (4.0+) | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
 | Actions | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
 | Tables | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
-| Infolists (3.0+) | `PanZoomEntry` | `use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;` |
+| Infolists (3.3+) | `PanZoomEntry` | `use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;` |
 | Infolists (4.0+) | `PanZoomEntry` | `use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;` |
 
 > **Why two components?** Filament has separate component hierarchies for Forms and Infolists. Using the wrong one will cause a TypeError.
 
-### Key Differences: Filament 3.0+ vs 4.0+
+### Key Differences: Filament 3.3+ vs 4.0+
 
-| Feature | Filament 3.0+ | Filament 4.0+ |
+| Feature | Filament 3.3+ | Filament 4.0+ |
 |---------|---------------|---------------|
 | **Forms Structure** | `form(Form $form): Form` | `configure(Schema $schema): Schema` |
 | **Infolists Structure** | `infolist(Infolist $infolist): Infolist` | `configure(Schema $schema): Schema` |
@@ -205,7 +219,7 @@ You can use the component directly in any Blade view (works in both 3.0+ and 4.0
 
 ### Usage Examples
 
-#### Filament 3.0+ Examples
+#### Filament 3.3+ Examples
 
 **In Forms:**
 ```php
@@ -376,17 +390,22 @@ The component uses Tailwind CSS classes and is designed to work seamlessly with 
 **Fatal Error: Class was composed with trait conflicts**
 - ✅ Fixed in v1.2.1+ - update your package
 
+**Alpine Expression Error: `interactiveImage is not defined` or the viewer stays at `0%` on Filament 4.x**
+- ✅ Fixed in the current 1.4.x release line (after v1.4.5) - update the package and clear cached views/assets (`php artisan filament:assets` and `php artisan view:clear`)
+- ✅ The component is now registered with `Alpine.data()`, which is required by Filament 4's async Alpine loader
+- If you previously published the views (`filament-panzoom-views`), republish or delete them so the updated Blade templates are used
+
 **Method not found: label() or columnSpanFull() in Filament 4.0+**
 - ❌ These methods aren't available in Filament 4.0+ Schemas
-- ✅ Remove these method calls or use Filament 3.0+ syntax
+- ✅ Remove these method calls or use Filament 3.3+ syntax
 
 **Undefined type 'Filament\Schemas\Components\Component'**
-- ❌ Linter error in Filament 3.0+ environment
+- ❌ Linter error in Filament 3.3+ environment
 - ✅ This is expected - the package uses runtime detection for compatibility
 
 ### Version-Specific Issues
 
-#### Filament 3.0+
+#### Filament 3.3+
 - ✅ All methods available (`label()`, `columnSpanFull()`, etc.)
 - ✅ Traditional Forms/Infolists structure
 
@@ -399,11 +418,11 @@ The component uses Tailwind CSS classes and is designed to work seamlessly with 
 
 | Context | Component | Import |
 |---------|-----------|--------|
-| Forms (3.0+) | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
+| Forms (3.3+) | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
 | Forms (4.0+) | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
 | Actions | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
 | Tables | `PanZoom` | `use SolutionForest\FilamentPanzoom\Components\PanZoom;` |
-| Infolists (3.0+) | `PanZoomEntry` | `use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;` |
+| Infolists (3.3+) | `PanZoomEntry` | `use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;` |
 | Infolists (4.0+) | `PanZoomEntry` | `use SolutionForest\FilamentPanzoom\Infolists\Components\PanZoomEntry;` |
 
 ## Browser Support
