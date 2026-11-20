@@ -4,12 +4,13 @@
  |--------------------------------------------------------------------------
  | Exposes a global `interactiveImage(imageUrl, imageId)` function that can
  | be used in Blade via x-data="interactiveImage(...)".
+ | Also registers with Alpine.data() for Filament 4.x / async-alpine support.
  */
 
  (function () {
     if (typeof window === 'undefined') return;
 
-    window.interactiveImage = function (imageUrl, imageId, doubleClickZoomLevel = 3) {
+    var interactiveImageFactory = function (imageUrl, imageId, doubleClickZoomLevel = 3) {
         return {
             imageUrl: imageUrl,
             imageId: imageId,
@@ -273,4 +274,24 @@
             },
         };
     };
+
+    // Keep as window global for backward compatibility / direct Alpine expression evaluation
+    window.interactiveImage = interactiveImageFactory;
+
+    // Also register with Alpine.data() for Filament 4.x / async-alpine compatibility.
+    // This ensures the component is available when Alpine processes x-data directives
+    // regardless of whether the script loads before or after Alpine initialises.
+    var register = function () {
+        if (window.Alpine) {
+            window.Alpine.data('interactiveImage', interactiveImageFactory);
+        }
+    };
+
+    // If Alpine hasn't initialised yet, wait for alpine:init
+    document.addEventListener('alpine:init', register);
+
+    // If Alpine is already initialised (script loaded late), register immediately
+    if (window.Alpine) {
+        register();
+    }
 })();
