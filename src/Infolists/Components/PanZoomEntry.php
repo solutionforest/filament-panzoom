@@ -9,21 +9,26 @@ if (class_exists('Filament\Schemas\Components\Component')) {
     // Filament 4.x
     class PanZoomEntry extends Component
     {
-        /** @phpstan-ignore property.defaultValue */
-        protected string $view = 'filament-panzoom::infolists.components.pan-zoom-entry';
-
         protected string | \Closure | null $imageUrl = null;
 
         protected string | \Closure | null $imageId = null;
 
         protected float $doubleClickZoomLevel = 3.0;
 
+        /** @phpstan-ignore property.defaultValue */
+        protected string $view = 'filament-panzoom::infolists.components.pan-zoom-entry';
+
         public static function make(string $name = 'panzoom-entry'): static
         {
-            $static = app(static::class, ['name' => $name]);
-            $static->configure();
+            $component = app(static::class, ['name' => $name]);
 
-            return $static;
+            if (! $component instanceof static) {
+                throw new \RuntimeException('Unable to resolve the panzoom component.');
+            }
+
+            $component->configure();
+
+            return $component;
         }
 
         public function doubleClickZoomLevel(float $level): static
@@ -54,33 +59,46 @@ if (class_exists('Filament\Schemas\Components\Component')) {
 
         public function getImageUrl(): ?string
         {
-            return $this->evaluate($this->imageUrl);
+            $url = $this->evaluate($this->imageUrl);
+
+            return is_string($url) ? $url : null;
         }
 
         public function getImageId(): ?string
         {
-            return $this->evaluate($this->imageId) ?? 'panzoom-entry-' . $this->getId();
+            $id = $this->evaluate($this->imageId);
+
+            if (is_string($id)) {
+                return $id;
+            }
+
+            return 'panzoom-entry-' . ($this->getId() ?? '');
         }
     }
 } else {
     // Filament 3.x
     class PanZoomEntry extends \Filament\Infolists\Components\Component
     {
-        /** @phpstan-ignore property.defaultValue */
-        protected string $view = 'filament-panzoom::infolists.components.pan-zoom-entry';
-
         protected string | \Closure | null $imageUrl = null;
 
         protected string | \Closure | null $imageId = null;
 
         protected float $doubleClickZoomLevel = 3.0;
 
+        /** @phpstan-ignore property.defaultValue */
+        protected string $view = 'filament-panzoom::infolists.components.pan-zoom-entry';
+
         public static function make(string $name = 'panzoom-entry'): static
         {
-            $static = app(static::class, ['name' => $name]);
-            $static->configure();
+            $component = app(static::class, ['name' => $name]);
 
-            return $static;
+            if (! $component instanceof static) {
+                throw new \RuntimeException('Unable to resolve the panzoom component.');
+            }
+
+            $component->configure();
+
+            return $component;
         }
 
         public function doubleClickZoomLevel(float $level): static
@@ -111,12 +129,20 @@ if (class_exists('Filament\Schemas\Components\Component')) {
 
         public function getImageUrl(): ?string
         {
-            return $this->evaluate($this->imageUrl);
+            $url = $this->evaluate($this->imageUrl);
+
+            return is_string($url) ? $url : null;
         }
 
         public function getImageId(): ?string
         {
-            return $this->evaluate($this->imageId) ?? 'panzoom-entry-' . $this->getId();
+            $id = $this->evaluate($this->imageId);
+
+            if (is_string($id)) {
+                return $id;
+            }
+
+            return 'panzoom-entry-' . ($this->getId() ?? '');
         }
     }
 }

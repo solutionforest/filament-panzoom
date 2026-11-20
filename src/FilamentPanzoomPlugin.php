@@ -24,13 +24,22 @@ class FilamentPanzoomPlugin implements Plugin
 
     public static function make(): static
     {
-        return app(static::class);
+        $plugin = app(static::class);
+
+        if (! $plugin instanceof static) {
+            throw new \RuntimeException('Unable to resolve the panzoom plugin.');
+        }
+
+        return $plugin;
     }
 
     public static function get(): static
     {
-        /** @var static $plugin */
-        $plugin = filament(app(static::class)->getId());
+        $plugin = filament(static::make()->getId());
+
+        if (! $plugin instanceof static) {
+            throw new \RuntimeException('Unable to resolve the panzoom plugin.');
+        }
 
         return $plugin;
     }

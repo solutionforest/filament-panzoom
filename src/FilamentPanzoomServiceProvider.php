@@ -88,7 +88,7 @@ class FilamentPanzoomServiceProvider extends PackageServiceProvider
         Testable::mixin(new TestsFilamentPanzoom);
     }
 
-    protected function getAssetPackageName(): ?string
+    protected function getAssetPackageName(): string
     {
         return 'solutionforest/filament-panzoom';
     }
@@ -115,7 +115,7 @@ class FilamentPanzoomServiceProvider extends PackageServiceProvider
     }
 
     /**
-     * @return array<string>
+     * @return array<string, string>
      */
     protected function getIcons(): array
     {
