@@ -10,23 +10,26 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
-        php: [8.3]
-        laravel: [11.*]
-        stability: [prefer-lowest, prefer-stable]
         include:
-          - laravel: 11.*
-            testbench: 9.*
+          - php: '8.3'
+            laravel: '11.*'
+            testbench: '9.*'
+            filament: '^3.3'
+          - php: '8.3'
+            laravel: '12.*'
+            testbench: '10.*'
+            filament: '^4.0'
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }}
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - F${{ matrix.filament }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
@@ -40,21 +43,14 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
-          # Require Laravel framework
-          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+          # The test matrix intentionally installs older verified Laravel majors,
+          # which Composer 2.10's new advisory blocking refuses to resolve.
+          # These are dev-only dependencies for the test environment.
+          composer config policy.advisories.block false --no-interaction
 
-          # Require Testbench and upgrade Collision for Laravel 11 compatibility
+          composer require "laravel/framework:${{ matrix.laravel }}" "filament/filament:${{ matrix.filament }}" --no-interaction --no-update
           composer require --dev "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
-          composer require --dev "nunomaduro/collision:^8.0" --no-interaction --no-update
-
-          # Update dependencies
-          if [ "${{ matrix.stability }}" = "prefer-lowest" ]; then
-            # Pin Canvas to avoid incompatible old versions
-            composer update --prefer-lowest --prefer-dist --no-interaction \
-              --with="orchestra/canvas:^9.0"
-          else
-            composer update --prefer-stable --prefer-dist --no-interaction
-          fi
+          composer update --prefer-stable --prefer-dist --no-interaction
 
       - name: List Installed Dependencies
         run: composer show -D
