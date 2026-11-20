@@ -5,6 +5,7 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/solutionforest/filament-panzoom/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/solutionforest/filament-panzoom/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/solutionforest/filament-panzoom/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/solutionforest/filament-panzoom/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/solution-forest/filament-panzoom.svg?style=flat-square)](https://packagist.org/packages/solution-forest/filament-panzoom)
+[![PHPStan level 10](https://img.shields.io/badge/PHPStan-level%2010-2A5B84?style=flat-square)](https://phpstan.org)
 
 An interactive image zoom and pan component for Filament PHP. This package provides a beautiful, responsive image viewer with smooth zoom and pan functionality, perfect for viewing receipts, documents, or any images that require detailed inspection.
 
@@ -35,8 +36,8 @@ The table below shows which Filament, Laravel and PHP versions each package rele
 
 | Package version | Filament | Laravel | PHP | Status |
 |-----------------|----------|---------|-----|--------|
-| `1.4.x` | `3.3` – `3.x` | `10.x` – `11.x` | `8.3+` | Supported |
-| `1.4.x` | `4.0` – `4.x` | `11.x` – `12.x` | `8.3+` | Supported |
+| `1.4.6+` | `3.3` – `3.x` | `10.x` – `11.x` | `8.3+` | Supported |
+| `1.4.6+` | `4.0` – `4.x` | `11.x` – `12.x` | `8.3+` | Supported |
 | `1.3.x` and older | `3.x` only | `10.x` | `8.3+` | Legacy |
 
 > **Filament 5.x is not supported yet.** The package is tested against Filament 3.x and 4.x.
@@ -431,6 +432,14 @@ The component uses Tailwind CSS classes and is designed to work seamlessly with 
 - Firefox 65+
 - Safari 12+
 - Edge 79+
+
+## Static Analysis
+
+<p align="center">
+    <a href="https://phpstan.org"><img src="https://i.imgur.com/WaRKPlC.png" alt="PHPStan" height="72"></a>
+</p>
+
+The package is analysed with [PHPStan](https://phpstan.org) at **level 10** against both supported Filament majors. The CI matrix runs PHPStan with Filament 3.x and Filament 4.x so version-specific code is checked in both environments.
 
 ## Testing
 

@@ -17,13 +17,26 @@ jobs:
         with:
           ref: main
 
+      - name: Check whether the changelog already contains this release
+        id: changelog
+        env:
+          RELEASE_NAME: ${{ github.event.release.name }}
+        run: |
+          if grep -qF "## ${RELEASE_NAME}" CHANGELOG.md; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Update Changelog
+        if: steps.changelog.outputs.exists == 'false'
         uses: stefanzweifel/changelog-updater-action@dd32e02e4c96d6e729bae24bdbcbb92452dbc9ea # v1
         with:
           latest-version: ${{ github.event.release.name }}
           release-notes: ${{ github.event.release.body }}
 
       - name: Commit updated CHANGELOG
+        if: steps.changelog.outputs.exists == 'false'
         uses: stefanzweifel/git-auto-commit-action@d0b01107b5db882071f96de5dd4b54961ea93f4c # v7
         with:
           branch: main

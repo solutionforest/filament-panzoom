@@ -2,7 +2,7 @@
 
 All notable changes to `filament-panzoom` will be documented in this file.
 
-## Unreleased
+## v1.4.6 - 2026-11-20
 
 ### Fixed
 
@@ -25,6 +25,8 @@ All notable changes to `filament-panzoom` will be documented in this file.
 - The test matrix now covers Filament 3.x on Laravel 11 and Filament 4.x on Laravel 12.
 - PHPStan now runs at **level 10** against both Filament majors, and the Composer advisory policy is relaxed for the dev-only CI installs.
 - Widened the dev dependency constraints so both Filament majors can be tested.
+
+**Full Changelog**: https://github.com/solutionforest/filament-panzoom/compare/v1.4.5...v1.4.6
 
 ## v1.4.5 - 2025-09-03
 
