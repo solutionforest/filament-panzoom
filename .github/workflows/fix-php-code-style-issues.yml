@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '**.php'
+  workflow_dispatch:
 
 permissions:
   contents: write

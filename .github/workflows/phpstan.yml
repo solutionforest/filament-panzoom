@@ -5,6 +5,7 @@ on:
     paths:
       - '**.php'
       - 'phpstan.neon.dist'
+  workflow_dispatch:
   pull_request:
     paths:
       - '**.php'
