@@ -25,8 +25,13 @@ jobs:
           extensions: mbstring
           coverage: none
 
+      - name: Install dependencies
+        run: |
+          composer config policy.advisories.block false --no-interaction
+          composer update --prefer-stable --prefer-dist --no-interaction
+
       - name: Fix PHP code style issues
-        uses: aglipanci/laravel-pint-action@36de00d5f5a8a4e12d443e01671daa12a18f4c79 # 2.6
+        run: vendor/bin/pint
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@d0b01107b5db882071f96de5dd4b54961ea93f4c # v7
