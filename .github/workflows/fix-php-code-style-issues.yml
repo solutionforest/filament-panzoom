@@ -9,6 +9,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: php-code-styling-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   php-code-styling:
     runs-on: ubuntu-latest
@@ -27,9 +31,7 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: |
-          composer config policy.advisories.block false --no-interaction
-          composer update --prefer-stable --prefer-dist --no-interaction
+        run: composer update --prefer-stable --prefer-dist --no-interaction
 
       - name: Fix PHP code style issues
         run: vendor/bin/pint
@@ -38,3 +40,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@d0b01107b5db882071f96de5dd4b54961ea93f4c # v7
         with:
           commit_message: Fix styling
+          file_pattern: '**/*.php'
