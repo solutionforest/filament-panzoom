@@ -2,6 +2,23 @@
 
 All notable changes to `filament-panzoom` will be documented in this file.
 
+## Unreleased
+
+### Fixed
+
+- Filament 4.x: the component no longer renders empty or stuck at `0%`. The Blade view no longer adds its own form/entry wrapper, because Filament 4 renders that wrapper automatically.
+- Filament 3.x: the component content now renders inside forms instead of being swallowed by the wrapper.
+- The `interactiveImage` Alpine component is registered with `Alpine.data()`, which is required by Filament 4's async Alpine loader.
+- `@include('filament-panzoom::filament-panzoom', ...)` now respects the `doubleClickZoomLevel` option.
+
+### Changed
+
+- Extracted the shared viewer markup into the `components.pan-zoom-image` Blade partial.
+
+### Documentation
+
+- Added a supported versions table covering Filament, Laravel and PHP.
+
 ## v1.4.5 - 2025-09-03
 
 **Full Changelog**: https://github.com/solutionforest/filament-panzoom/compare/v1.4.4...v1.4.5
