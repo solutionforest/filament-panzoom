@@ -2,11 +2,14 @@
 
 namespace SolutionForest\FilamentPanzoom\Components;
 
+use Filament\Schemas\Components\Component;
+
 // Check if we're in Filament 4.x (has Schemas) or 3.x (Forms only)
 if (class_exists('Filament\Schemas\Components\Component')) {
     // Filament 4.x
-    class PanZoom extends \Filament\Schemas\Components\Component
+    class PanZoom extends Component
     {
+        /** @phpstan-ignore property.defaultValue */
         protected string $view = 'filament-panzoom::components.pan-zoom';
 
         protected string | \Closure | null $imageUrl = null;
@@ -63,6 +66,7 @@ if (class_exists('Filament\Schemas\Components\Component')) {
     // Filament 3.x
     class PanZoom extends \Filament\Forms\Components\Component
     {
+        /** @phpstan-ignore property.defaultValue */
         protected string $view = 'filament-panzoom::components.pan-zoom';
 
         protected string | \Closure | null $imageUrl = null;
